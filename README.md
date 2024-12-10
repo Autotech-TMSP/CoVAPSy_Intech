@@ -1,5 +1,9 @@
-# CoVAPSy_Intech
-Le répertoire de code pour le développement d’une voiture autonome pour participer à la course CoVAPSy édition 2025
+# CoVAPSy
 
+AutoTech est un projet du Club de robotique INTech de Telecom SudParis et IMT Business School. Son objectif est de concevoir un véhicule autonome pour la compétition CoVAPSy.
 
-https://www.youtube.com/watch?v=cUojVsCJ51I
+Ce répertoire contient le code pour développer une voiture autonome pour la course CoVAPSy 2025.
+
+[Consultez les règles de la competition](https://ajuton-ens.github.io/CourseVoituresAutonomesSaclay/)
+
+[Consultez la documentation du projet](https://club-intech.github.io/CoVAPSy/Lidar/)
