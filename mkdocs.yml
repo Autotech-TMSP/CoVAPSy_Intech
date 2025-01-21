@@ -4,6 +4,7 @@ nav:
   - Home: index.md
   - Lidar.md
   - IA.md
+  - Asservissement.md
   - How to create documentation: building_docs.md
   - Regle de la course: https://ajuton-ens.github.io/CourseVoituresAutonomesSaclay/
 
