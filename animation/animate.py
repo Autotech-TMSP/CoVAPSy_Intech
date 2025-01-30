@@ -1,7 +1,9 @@
 import time
 import Adafruit_SSD1306
 from PIL import Image, ImageDraw, ImageFont
-import Adafruit_GPIO.Platform as Platform
+import adafruit-circuitpython-ssd1306
+import smbus # import SMBus module of I2C
+bus = smbus.SMBus(1) # Create a new I2C bus
 
 # Raspberry Pi pin configuration:
 RST = None  # on the PiOLED this pin isn't used
