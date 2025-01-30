@@ -20,11 +20,8 @@ png_path = "animation/image.png"
 image = Image.open(png_path)
 
 # Resize the image to fit the device
-image = image.resize((device.width, device.height)).convert("1")
-
-# Display the image
-with canvas(device) as draw:
-    draw.bitmap((0, 0), image, fill=1)
-
-# Keep the display on for a while
-time.sleep(10)
+image = image.convert("1")   #resize((device.width, device.height))
+while True:
+    with canvas(device) as draw:
+        draw.bitmap((0, 0), image, fill=1)
+    time.sleep(0.1)  # Adjust the delay as needed
