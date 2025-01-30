@@ -1,4 +1,7 @@
 import time
+from luma.core.interface.serial import i2c
+from luma.core.render import canvas
+from luma.oled.device import ssd1306
 import Adafruit_SSD1306
 # import gpiozero
 from PIL import Image, ImageDraw, ImageFont
@@ -6,39 +9,18 @@ from PIL import Image, ImageDraw, ImageFont
 # import smbus # import SMBus module of I2C
 # bus = smbus.SMBus(1) # Create a new I2C bus
 
-# Raspberry Pi pin configuration:
-RST = None  # on the PiOLED this pin isn't used
-
-
-# 128x32 display with hardware I2C:
-disp = Adafruit_SSD1306.SSD1306_128_32(rst=RST, i2c_address=0x3C)
-
-# Initialize library.
-disp.begin()
-
-# Clear display.
-disp.clear()
-disp.display()
-
-# Create blank image for drawing.
-width = disp.width
-height = disp.height
-image = Image.new('1', (width, height))
-
-# Get drawing object to draw on image.
-draw = ImageDraw.Draw(image)
-
-# Draw a black filled box to clear the image.
-draw.rectangle((0, 0, width, height), outline=0, fill=0)
+# I2C configuration
+serial = i2c(port=1, address=0x3C)
+device = ssd1306(serial)
 
 # Load default font.
 font = ImageFont.load_default()
 
-# Write "Hello World" on the display.
-text = "Hello World"
-(draw_width, draw_height) = draw.textsize(text, font=font)
-draw.text(((width - draw_width) / 2, (height - draw_height) / 2), text, font=font, fill=255)
+# Display "Hello World"
+with canvas(device) as draw:
+    text = "Hello World"
+    (draw_width, draw_height) = draw.textsize(text, font=font)
+    draw.text(((device.width - draw_width) / 2, (device.height - draw_height) / 2), text, font=font, fill=255)
 
-# Display image.
-disp.image(image)
-disp.display()
+# Keep the display on for a while
+time.sleep(10)

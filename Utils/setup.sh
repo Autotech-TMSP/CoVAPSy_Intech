@@ -21,9 +21,10 @@ python3 -m venv autotechenv
 source autotechenv/bin/activate
 
 # Install necessary Python packages within the virtual environment
-pip install Adafruit-SSD1306
+pip install luma
 pip install rpi_hardware_pwm
 pip install matplotlib
 pip install RPi.GPIO
+pip install PIL
 
 
