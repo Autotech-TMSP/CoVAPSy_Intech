@@ -19,6 +19,7 @@ png_path = "animation/image.jpg"
 # Open the PNG image
 image = Image.open(png_path)
 
+image = image.resize((device.width, device.height)).convert("1")
 while True:
     with canvas(device) as draw:
         draw.bitmap((0, 0), image, fill=1)
