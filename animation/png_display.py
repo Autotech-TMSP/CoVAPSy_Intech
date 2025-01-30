@@ -14,13 +14,11 @@ font = ImageFont.load_default()
 
 
 # Convert SVG to PNG
-png_path = "animation/image.png"
+png_path = "animation/image.jpg"
 
 # Open the PNG image
 image = Image.open(png_path)
 
-# Resize the image to fit the device
-image = image.convert("1")   #resize((device.width, device.height))
 while True:
     with canvas(device) as draw:
         draw.bitmap((0, 0), image, fill=1)
