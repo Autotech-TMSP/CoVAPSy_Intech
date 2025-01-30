@@ -12,6 +12,7 @@ sudo systemctl restart systemd-networkd
 # Install necessary Python packages
 sudo apt-get install python3-matplotlib
 sudo apt-get install python3-rpi.gpio
+pip install Adafruit-SSD1306 --break-system-package
 
 # Install the rpi_hardware_pwm package, bypassing the system package management
 pip install rpi_hardware_pwm --break-system-package
