@@ -1,17 +1,14 @@
 import time
 import Adafruit_SSD1306
+# import gpiozero
 from PIL import Image, ImageDraw, ImageFont
-import adafruit-circuitpython-ssd1306
-import smbus # import SMBus module of I2C
-bus = smbus.SMBus(1) # Create a new I2C bus
+# import adafruit-circuitpython-ssd1306
+# import smbus # import SMBus module of I2C
+# bus = smbus.SMBus(1) # Create a new I2C bus
 
 # Raspberry Pi pin configuration:
 RST = None  # on the PiOLED this pin isn't used
 
-platform = Platform.platform_detect()
-if platform == Platform.RASPBERRY_PI:
-    import Adafruit_GPIO.I2C as I2C
-    I2C.require_repeated_start()
 
 # 128x32 display with hardware I2C:
 disp = Adafruit_SSD1306.SSD1306_128_32(rst=RST, i2c_address=0x3C)
