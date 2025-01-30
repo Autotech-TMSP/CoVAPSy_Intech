@@ -33,5 +33,7 @@ while True:
         with canvas(device) as draw:
             # Convert frame to RGB and resize to fit the device
             frame = frame.convert("RGB").resize((device.width, device.height))
+            # Convert frame to 1-bit color
+            frame = frame.convert("1")
             draw.bitmap((0, 0), frame, fill=1)
         time.sleep(0.1)  # Adjust the delay as needed
