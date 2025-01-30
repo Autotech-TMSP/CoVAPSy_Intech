@@ -5,7 +5,7 @@
 String message = "Hello, World!";
 
 // Initialize the display
-U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NONE);
+U8GLIB_SSD1306_128X64 display(U8G_I2C_OPT_NONE);
 
 void setup() {
   WIRE.begin();
@@ -25,15 +25,15 @@ void setup() {
   }
 
   // Display initialization
-  u8g.setFont(u8g_font_unifont);
+  display.setFont(u8g_font_unifont);
 }
 
 void loop() {
   // Draw the message on the display
-  u8g.firstPage();
+  display.firstPage();
   do {
-    u8g.drawStr(0, 22, message.c_str());
-  } while (u8g.nextPage());
+    display.drawStr(0, 22, message.c_str());
+  } while (display.nextPage());
 
   delay(1000);
 }
