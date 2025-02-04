@@ -2,11 +2,9 @@ import time
 from luma.core.interface.serial import i2c
 from luma.core.render import canvas
 from luma.oled.device import ssd1306
-import Adafruit_SSD1306
-# import gpiozero
+
 from PIL import Image, ImageDraw, ImageFont, ImageSequence
-# import adafruit-circuitpython-ssd1306
-# import smbus # import SMBus module of I2C
+# import smbus #type: ignore #ignore the module could not be resolved error because it is a linux only module
 # bus = smbus.SMBus(1) # Create a new I2C bus
 
 gif_path = "animation/improved_race_car_animation.gif"

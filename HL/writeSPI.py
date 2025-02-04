@@ -1,4 +1,4 @@
-import spidev
+import spidev #type: ignore #ignore the module could not be resolved error because it is a linux only module
 import struct
 import time
 
