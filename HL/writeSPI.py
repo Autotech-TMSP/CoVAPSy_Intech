@@ -20,7 +20,7 @@ try:
         spi.xfer2(list(send2_bytes))
 
         # Close SPI
-        spi.close()
+    spi.close()
     
 except FileNotFoundError:
     print("SPI device not found. Ensure SPI is enabled and the correct device file is used.")
