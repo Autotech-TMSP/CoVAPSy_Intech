@@ -1,5 +1,6 @@
 import spidev
 import struct
+import time
 
 # Initialize SPI
 spi = spidev.SpiDev()
@@ -18,6 +19,7 @@ try:
         spi.xfer2([0x01])  # Send a dummy byte to initiate the transfer
         spi.xfer2(list(send1_bytes))
         spi.xfer2(list(send2_bytes))
+        time.sleep(1)
 
         # Close SPI
     spi.close()
