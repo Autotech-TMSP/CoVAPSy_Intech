@@ -16,7 +16,7 @@ try:
         send2_bytes = struct.pack('>f', send2)
 
         # Send data to SPI slave
-        spi.xfer2([0x01])  # Send a dummy byte to initiate the transfer
+        # spi.xfer2([0x01])  # Send a dummy byte to initiate the transfer
         spi.xfer2(list(send1_bytes))
         spi.xfer2(list(send2_bytes))
         time.sleep(1)
