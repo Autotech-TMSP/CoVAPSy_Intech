@@ -83,9 +83,15 @@ try :
                 tableau_lidar_mm[angle] = lidar.rDistance[540 + (-angle * 4)]
         #l'angle de la direction est la différence entre les mesures  
         #des rayons du lidar à -60 et +60°  
-        
+        small_index=[]
+        small_dist=[]
+        for index, angle in enumerate(lidar.rDistance):
+            if angle < 50:
+                small_index.append(index)
+                small_dist.append(angle)    
+        print(small_index,small_dist)
         angle_degre = 0.02*(tableau_lidar_mm[60]-tableau_lidar_mm[-60])
-        print(tableau_lidar_mm[60], tableau_lidar_mm[-60], angle_degre)
+        #print(tableau_lidar_mm[60], tableau_lidar_mm[-60], angle_degre)
         set_direction_degre(angle_degre)
         vitesse_m_s = 0.05
         set_vitesse_m_s(vitesse_m_s)    
