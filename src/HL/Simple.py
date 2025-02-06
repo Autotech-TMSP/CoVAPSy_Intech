@@ -86,7 +86,7 @@ try :
         small_index=[]
         small_dist=[]
         for index, angle in enumerate(lidar.rDistance):
-            if angle < 50:
+            if angle < 50 and angle != 0:
                 small_index.append(index)
                 small_dist.append(angle)    
         print(small_index,small_dist)
