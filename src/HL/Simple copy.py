@@ -15,7 +15,7 @@ point_mort_prop = 0.5
 delta_pwm_max_prop = 1.1 #pwm à laquelle on atteint la vitesse maximale
 
 vitesse_max_m_s_hard = 8 #vitesse que peut atteindre la voiture
-vitesse_max_m_s_soft = 2 #vitesse maximale que l'on souhaite atteindre
+vitesse_max_m_s_soft = 1 #vitesse maximale que l'on souhaite atteindre
 
 
 #paramètres de la fonction set_direction_degre
