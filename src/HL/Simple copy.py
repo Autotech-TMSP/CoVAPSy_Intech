@@ -2,10 +2,11 @@ from HokuyoReader import HokuyoReader
 
 import time
 from rpi_hardware_pwm import HardwarePWM
+import math
 
 IP = '192.168.0.10'
 PORT = 10940
-CRASH_DIST = 150  #mm
+CRASH_DIST = 135  #mm
 
 #paramètres de la fonction vitesse_m_s
 direction_prop = 1 # -1 pour les variateurs inversés ou un petit rapport correspond à une marche avant
@@ -66,52 +67,113 @@ def set_direction_degre(angle_degre) :
         angle_pwm = angle_pwm_min
     pwm_dir.change_duty_cycle(angle_pwm)
     
-#connexion et démarrage du lidar
-lidar = HokuyoReader(IP, PORT) 
-lidar.stop()
-lidar.startContinuous(0, 1080)
 
 
-tableau_lidar_mm = [0]*360 #création d'un tableau de 360 zéros
-
-time.sleep(1) #temps de démarrage du lidar
-
-try : 
-    while True :
+def conduite_autonome2(rDistance):
         for angle in range(len(tableau_lidar_mm)) :
             # translation of the angle from the lidar to the angle of the table
             if angle > 135 and angle < 225:
                 tableau_lidar_mm[angle] = float('nan')
             else:
                 tableau_lidar_mm[angle] = lidar.rDistance[540 + (-angle * 4)]
-        #l'angle de la direction est la différence entre les mesures  
-        #des rayons du lidar à -60 et +60°  
-        small_index=[]
-        small_dist=[]
-        for index, angle in enumerate(lidar.rDistance):
-            if angle < CRASH_DIST and angle != 0:
-                small_index.append(index)
-                small_dist.append(angle)
+
+        ####################################################
+        ###################################################
+
+        maxi = 0
+        maxi_n = 0
+
+        f=15
+
+        for i in range(-45, 45):
+            j = 0
+            for n in range(i-f , i+f):
+                j += tableau_lidar_mm[n]
+            if j > maxi:
+                maxi = j
+                maxi_n = i
+        print("maxi = ", maxi," n = ", maxi_n)
+
+
+        proche = 20000
+
+        V45 = 0
+        n_V45 = 0
+        for i in range(-45 , 45) :
+            test_min = tableau_lidar_mm[i]
+            if (test_min != 0):
+                V45 += test_min
+                n_V45 += 1
+                if (test_min < proche):
+                    proche = test_min
+        V45 = V45/n_V45
+        if (proche > 0) and (proche <= 180) :
+            print(proche)
+            vitesse = 0
+            print("close")
+            recule()
+        else :
+            vitesse = V45*0.002
+            print("v = ",vitesse)
+            vitesse = 2
+
+        set_vitesse_m_s(vitesse)
+
+
+        if vitesse >= 0.057 :
+            try :
+                angle_cible = (maxi_n/180)*math.pi
+                val = (1.35*angle_cible)/vitesse
+                print("val = ",val)
+                angle = (math.atan(val)/math.pi)*180
+            except :
+                angle = 0
+                print("pb angle")
+        else :
+            angle = 0
+        print("angle = ",angle)
+        set_direction_degre(angle)
+        
+def has_Crashed():
+    small_index=[]
+    small_dist=[]
+    for index, angle in enumerate(lidar.rDistance):
+        if angle < CRASH_DIST and angle != 0:
+            small_index.append(index)
+            small_dist.append(angle)
                 
-        if len(small_dist)>2:
-            print(small_index,small_dist)
+    if len(small_dist)>2:
+        print(small_index,small_dist)
+        return True
+    else:
+        return False
+    
+
+def drive():
+    while True:
+        if has_Crashed():
             recule()
             time.sleep(0.5)
-        angle_degre = 0.02*(tableau_lidar_mm[60]-tableau_lidar_mm[-60])
-        #print(tableau_lidar_mm[60], tableau_lidar_mm[-60], angle_degre)
-        set_direction_degre(angle_degre)
-        vitesse_m_s = 0.05
-        set_vitesse_m_s(vitesse_m_s)    
-        time.sleep(0.1)
-        ##############################################
-except KeyboardInterrupt: #récupération du CTRL+C
-    vitesse_m_s = 0
-    set_vitesse_m_s(vitesse_m_s)
-    print("fin des acquisitions")
+        conduite_autonome2()
 
-#arrêt et déconnexion du lidar et des moteurs
-lidar.stop()
-pwm_dir.stop()
-pwm_prop.start(pwm_stop_prop)
+if __name__ == '__main__':
+    #connexion et démarrage du lidar
+    lidar = HokuyoReader(IP, PORT) 
+    lidar.stop()
+    lidar.startContinuous(0, 1080)
 
 
+    tableau_lidar_mm = [0]*360 #création d'un tableau de 360 zéros
+
+    time.sleep(1) #temps de démarrage du lidar
+    try : 
+        drive()
+    except KeyboardInterrupt: #récupération du CTRL+C
+        vitesse_m_s = 0
+        set_vitesse_m_s(vitesse_m_s)
+        print("fin des acquisitions")
+
+    #arrêt et déconnexion du lidar et des moteurs
+    lidar.stop()
+    pwm_dir.stop()
+    pwm_prop.start(pwm_stop_prop)
