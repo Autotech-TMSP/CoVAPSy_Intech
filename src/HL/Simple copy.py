@@ -46,10 +46,10 @@ def set_vitesse_m_s(vitesse_m_s):
 def recule():
     set_vitesse_m_s(-vitesse_max_m_s_hard)
     print("recule")
-    time.sleep(0.2)
+    time.sleep(0.4)
     set_vitesse_m_s(0)
-    time.sleep(0.2)
-    set_vitesse_m_s(-1)
+    time.sleep(0.4)
+    set_vitesse_m_s(-2)
     
     
 pwm_dir = HardwarePWM(pwm_channel=1,hz=50,chip=2) #use chip 2 on pi 5 in accordance with the documentation 
