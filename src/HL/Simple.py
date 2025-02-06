@@ -5,6 +5,7 @@ from rpi_hardware_pwm import HardwarePWM
 
 IP = '192.168.0.10'
 PORT = 10940
+CRASH_DIST = 150  #mm
 
 #paramètres de la fonction vitesse_m_s
 direction_prop = 1 # -1 pour les variateurs inversés ou un petit rapport correspond à une marche avant
@@ -86,7 +87,7 @@ try :
         small_index=[]
         small_dist=[]
         for index, angle in enumerate(lidar.rDistance):
-            if angle < 120 and angle != 0:
+            if angle < CRASH_DIST and angle != 0:
                 small_index.append(index)
                 small_dist.append(angle)    
         print(small_index,small_dist)
