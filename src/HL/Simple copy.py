@@ -137,13 +137,21 @@ def conduite_autonome2(rDistance):
 def has_Crashed():
     small_index=[]
     small_dist=[]
+    mini= float("inf")
+    mini_index=float("nan")
     for index, angle in enumerate(lidar.rDistance):
         if angle < CRASH_DIST and angle != 0:
             small_index.append(index)
             small_dist.append(angle)
-                
+        if angle < mini and angle != 0:
+            mini = angle
+            mini_index = index
     if len(small_dist)>2:
         print(small_index,small_dist)
+        if mini_index < 540:
+            set_direction_degre(10)
+        else:
+            set_direction_degre(-10)
         return True
     else:
         return False
