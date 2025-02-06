@@ -1,4 +1,4 @@
-from src.HL.HokuyoReader import HokuyoReader
+from HokuyoReader import HokuyoReader
 
 import time
 from rpi_hardware_pwm import HardwarePWM
