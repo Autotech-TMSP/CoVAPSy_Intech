@@ -149,9 +149,9 @@ def has_Crashed():
     if len(small_dist)>2:
         print(small_index,small_dist)
         if mini_index < 540:
-            set_direction_degre(10)
+            set_direction_degre(18)
         else:
-            set_direction_degre(-10)
+            set_direction_degre(-18)
         return True
     else:
         return False
