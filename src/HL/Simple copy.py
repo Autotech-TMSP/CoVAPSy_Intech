@@ -154,7 +154,7 @@ def drive():
         if has_Crashed():
             recule()
             time.sleep(0.5)
-        conduite_autonome2()
+        conduite_autonome2(lidar.rDistance)
 
 if __name__ == '__main__':
     #connexion et démarrage du lidar
