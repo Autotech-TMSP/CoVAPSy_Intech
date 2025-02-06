@@ -89,8 +89,12 @@ try :
         for index, angle in enumerate(lidar.rDistance):
             if angle < CRASH_DIST and angle != 0:
                 small_index.append(index)
-                small_dist.append(angle)    
-        print(small_index,small_dist)
+                small_dist.append(angle)
+                
+        if small_dist:
+            print(small_index,small_dist)
+            recule()
+            time.sleep(0.5)
         angle_degre = 0.02*(tableau_lidar_mm[60]-tableau_lidar_mm[-60])
         #print(tableau_lidar_mm[60], tableau_lidar_mm[-60], angle_degre)
         set_direction_degre(angle_degre)
