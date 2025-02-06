@@ -1,0 +1,1 @@
+[HokuyoReader.py](HokuyoReader.py) is included with permission from the author [cassc](https://gist.github.com/cassc/26ac479624cb028b2567491a68c34fb8) who graciously released his code under MIT.
