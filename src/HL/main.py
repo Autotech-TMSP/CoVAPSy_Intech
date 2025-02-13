@@ -97,7 +97,7 @@ class Car():
         quit()
     
     def ai_update(self, lidar_data):
-        
+        lidar_data = np.array(lidar_data,dtype=np.float32)
         vect = self.ai_session.run(None, {'input': lidar_data[None]})[0][0] #2 vectors direction and speed. direction is between hard left at index 0 and hard right at index 1. speed is between min speed at index 0 and max speed at index 1
         
         vect_dir, vect_prop = vect[:16], vect[16:] #split the vector in 2
