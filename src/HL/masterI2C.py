@@ -12,11 +12,17 @@ def write_data(data):
     data_list = [ord(char) for char in data]
     bus.write_i2c_block_data(SLAVE_ADDRESS, 0, data_list)
 
+import struct
+
 def read_data(length):
     # Read a block of data from the slave
     data = bus.read_i2c_block_data(SLAVE_ADDRESS, 0, length)
-    # Convert list of ASCII values to string
-    return ''.join(chr(byte) for byte in data)
+    # Convert the byte data to a float
+    if len(data) >= 4:
+        float_value = struct.unpack('f', bytes(data[:4]))[0]
+        return float_value
+    else:
+        raise ValueError("Not enough data received from I2C bus")
 
 if __name__ == "__main__":
     try:

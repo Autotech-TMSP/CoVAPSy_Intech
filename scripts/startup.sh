@@ -1,4 +1,3 @@
 #!/bin/bash
 mkdir /home/intech/test
-
-python3 -m venv autotechenv
+python /home/intech/CoVAPSy/src/HL/displayvoltage.py
