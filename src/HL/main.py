@@ -19,7 +19,7 @@ class Car():
         self.PORT = 10940
 
         # Paramètres de la fonction vitesse_m_s
-        self.direction_prop = -1                                                             # -1 pour les variateurs inversés ou un petit rapport correspond à une marche avant
+        self.direction_prop = 1                                                             # -1 pour les variateurs inversés ou un petit rapport correspond à une marche avant
         self.pwm_stop_prop = 7.53
         self.point_mort_prop = 0.5
         self.delta_pwm_max_prop = 1.1                                                       # pwm à laquelle on atteint la vitesse maximale
@@ -29,7 +29,7 @@ class Car():
 
 
         # Paramètres de la fonction set_direction_degre
-        self.direction = 1                                                                  #1 pour angle_pwm_min a gauche, -1 pour angle_pwm_min à droite
+        self.direction = -1                                                                  #1 pour angle_pwm_min a gauche, -1 pour angle_pwm_min à droite
         self.angle_pwm_min = 6.91                                                           # min
         self.angle_pwm_max = 10.7                                                           # max
         self.angle_pwm_centre= 8.805
