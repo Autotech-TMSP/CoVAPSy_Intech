@@ -19,5 +19,7 @@ pip install Adafruit-SSD1306 --break-system-packages
 pip install rpi_hardware_pwm --break-system-packages
 pip install matplotlib --break-system-packages
 pip install RPi.GPIO --break-system-packages
+pip install numpy --break-system-packages 
+pip install onnx --break-system-packages
 
 
