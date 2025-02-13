@@ -21,3 +21,6 @@ pip install matplotlib --break-system-packages
 pip install RPi.GPIO --break-system-packages
 
 
+# Add the cron job to run the script at reboot
+(crontab -l 2>/dev/null; echo "@reboot /home/intech/CoVAPSy/scripts/startup.sh") | crontab -
+
