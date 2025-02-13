@@ -98,8 +98,9 @@ class Car():
     
     def ai_update(self, lidar_data):
         
-        vect_dir, vect_prop = self.ai_session.run(None, {'input': lidar_data[None]}) #2 vectors direction and speed. direction is between hard left at index 0 and hard right at index 1. speed is between min speed at index 0 and max speed at index 1
-        # vect_dir, vect_prop  = self.ai_model(lidar_data) 
+        vect = self.ai_session.run(None, {'input': lidar_data[None]})[0, 0] #2 vectors direction and speed. direction is between hard left at index 0 and hard right at index 1. speed is between min speed at index 0 and max speed at index 1
+        
+        vect_dir, vect_prop = vect[:16], vect[16:] #split the vector in 2
         vect_dir = softmax(vect_dir, dim=0) #distribution de probabilité
         vect_prop = softmax(vect_prop, dim=0)
         
@@ -113,7 +114,7 @@ class Car():
         print("Depart")
         try : 
             while True :
-                lidar_data = self.lidar.rDistance()[0:1079] #récupération des données du lidar. On ne prend que les 1080 premières valeurs et on ignore la dernière par facilit" pour l'ia
+                lidar_data = self.lidar.rDistance[0:1079] #récupération des données du lidar. On ne prend que les 1080 premières valeurs et on ignore la dernière par facilit" pour l'ia
                 angle, vitesse = self.ai_update(lidar_data)
                 self.set_direction_degre(angle)
                 self.set_vitesse_m_s(vitesse)
