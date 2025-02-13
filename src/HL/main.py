@@ -1,8 +1,16 @@
-from Lidar.HokuyoReader import HokuyoReader
+from HokuyoReader import HokuyoReader
 import time
 from rpi_hardware_pwm import HardwarePWM
+import torch
+import torch.nn.functional as F
 
-class Wrapper():
+
+MODEL_PATH = "model.pth"
+SOFT_MAX = 2
+VITESS_MIN = 0.1
+
+
+class Car():
 
     def __init__(self):
         
@@ -16,7 +24,7 @@ class Wrapper():
         self.delta_pwm_max_prop = 1.1                                                       # pwm à laquelle on atteint la vitesse maximale
 
         self.vitesse_max_m_s_hard = 8                                                       # vitesse que peut atteindre la voiture
-        self.vitesse_max_m_s_soft = 2                                                       # vitesse maximale que l'on souhaite atteindre
+        self.vitesse_max_m_s_soft = SOFT_MAX                                                      # vitesse maximale que l'on souhaite atteindre
 
 
         # Paramètres de la fonction set_direction_degre
@@ -35,12 +43,17 @@ class Wrapper():
 
         self.pwm_dir = HardwarePWM(pwm_channel=1,hz=50,chip=2)                              # Utilisation du chip 2 sur la pi 5 pour correspondre à la documentation
         self.pwm_dir.start(self.angle_pwm_centre)
+        self.ai_model = torch.load(MODEL_PATH)
+        
+        self.lookup_dir = torch.linspace(-18,18,16)
+        self.lookup_prop = torch.linspace(VITESS_MIN,SOFT_MAX,16)
 
         # Initialisation du lidar
 
         self.lidar = HokuyoReader(self.IP, self.PORT) 
         self.lidar.stop()
         self.lidar.startContinuous(0, 1080)
+        
 
     def set_vitesse_m_s(self, vitesse_m_s):
         if vitesse_m_s > self.vitesse_max_m_s_soft :
@@ -81,12 +94,28 @@ class Wrapper():
         self.lidar.disconnect()
         quit()
     
+    def ai_update(self, lidar_data):
+        
+        tensor_data=torch.tensor(lidar_data)
+         
+        vect_dir, vect_prop  = self.ai_model(tensor_data) #2 vectors direction and speed. direction is between hard left at index 0 and hard right at index 1. speed is between min speed at index 0 and max speed at index 1
+        vect_dir = F.softmax(vect_dir, dim=0) #distribution de probabilité
+        vect_prop = F.softmax(vect_prop, dim=0)
+        
+    
+        angle = sum(self.lookup_dir*vect_dir) #moyenne pondérée des angles
+        vitesse = sum(self.lookup_prop*vect_prop) #moyenne pondérée des vitesses
+        
+        return angle, vitesse    
+    
     def main(self):
         print("Depart")
         try : 
             while True :
-                #apelle model(lidar.rDistance)
-                #update 
+                lidar_data = self.lidar.rDistance()[0:1079] #récupération des données du lidar. On ne prend que les 1080 premières valeurs et on ignore la dernière par facilit" pour l'ia
+                angle, vitesse = self.ai_update(lidar_data)
+                self.set_direction_degre(angle)
+                self.set_vitesse_m_s(vitesse)
         except KeyboardInterrupt: #récupération du CTRL+C
             vitesse_m_s = 0
             self.set_vitesse_m_s(vitesse_m_s)
@@ -94,17 +123,19 @@ class Wrapper():
         finally:
             self.lidar.stop()
             self.pwm_dir.stop()
-            self.pwm_prop.start(self.pwm_stop_prop)            
+            self.pwm_prop.start(self.pwm_stop_prop) 
+            
+      
 
 if __name__ == '__main__' :
     try:
-        wrapper = Wrapper()
+        GR86 = Car()
         if input("Appuyez sur D pour démarrer ou tout autre touche pour quitter") in ("D","d"):
-            wrapper.main()
+            GR86.main()
         else:
             raise KeyboardInterrupt
         
     except KeyboardInterrupt:
-        wrapper.stop()
+        GR86.stop()
         print("Programme arrêté par l'utilisateur")
         pass
