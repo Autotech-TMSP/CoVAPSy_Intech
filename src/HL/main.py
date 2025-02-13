@@ -7,7 +7,7 @@ import numpy as np
 
 
 MODEL_PATH = "model.onnx"
-SOFT_MAX = 0.5
+SOFT_MAX = 0.25
 VITESS_MIN = 0.1
 
 
