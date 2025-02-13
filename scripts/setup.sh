@@ -21,6 +21,7 @@ pip install matplotlib --break-system-packages
 pip install RPi.GPIO --break-system-packages
 pip install numpy --break-system-packages 
 pip install onnx --break-system-packages
+pip install onnxruntime --break-system-packages
 
 
 # Add the cron job to run the script at reboot

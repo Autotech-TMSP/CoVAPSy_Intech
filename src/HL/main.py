@@ -1,7 +1,7 @@
 from HokuyoReader import HokuyoReader
 import time
 from rpi_hardware_pwm import HardwarePWM
-import onnx
+import onnxruntime as ort
 from scipy.special import softmax
 import numpy as np
 
@@ -44,8 +44,8 @@ class Car():
 
         self.pwm_dir = HardwarePWM(pwm_channel=1,hz=50,chip=2)                              # Utilisation du chip 2 sur la pi 5 pour correspondre à la documentation
         self.pwm_dir.start(self.angle_pwm_centre)
-        self.ai_model = onnx.load(MODEL_PATH)
-        print(onnx.checker.check_model(self.ai_model))
+        self.ai_session = ort.InferenceSession(MODEL_PATH)
+        
         
         self.lookup_dir = np.linspace(-18,18,16)
         self.lookup_prop = np.linspace(VITESS_MIN,SOFT_MAX,16)
@@ -98,8 +98,8 @@ class Car():
     
     def ai_update(self, lidar_data):
         
-         
-        vect_dir, vect_prop  = self.ai_model(lidar_data) #2 vectors direction and speed. direction is between hard left at index 0 and hard right at index 1. speed is between min speed at index 0 and max speed at index 1
+        vect_dir, vect_prop = self.ai_session.run(None, {'input': lidar_data[None]}) #2 vectors direction and speed. direction is between hard left at index 0 and hard right at index 1. speed is between min speed at index 0 and max speed at index 1
+        # vect_dir, vect_prop  = self.ai_model(lidar_data) 
         vect_dir = softmax(vect_dir, dim=0) #distribution de probabilité
         vect_prop = softmax(vect_prop, dim=0)
         
