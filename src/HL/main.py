@@ -8,7 +8,7 @@ import numpy as np
 
 MODEL_PATH = "model.onnx"
 SOFT_MAX = 0.5
-VITESS_MIN = 0.05
+VITESS_MIN = 0.1
 
 
 class Car():
